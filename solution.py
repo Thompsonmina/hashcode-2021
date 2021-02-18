@@ -5,5 +5,5 @@ INPUT_FOLDER = "input_datasets/"
 INPUT_FILE_NAME = argv[1]
 OUTPUT_FILE_NAME = argv[2]
 
-def parseInput(filename):
+def parseInput(filepath):
 	pass

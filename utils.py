@@ -37,9 +37,12 @@ class Reader():
 			a section is a group of lines that gives all the relevant details for a primary unit of data 
 		"""
 		sections = []
-
+		print(start)
+		print(n)
 		# start is one-indexed so need it to be zero indexed
 		for i in range(start - 1, n * sectionsize + 1, sectionsize):
+			print(start)
+			print("work?")
 			try:
 				# do not fret for althougn this is a nested loop its still O(n) time
 				section = []

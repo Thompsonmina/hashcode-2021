@@ -2,9 +2,9 @@ from sys import argv
 from utils import Reader
 from collections import defaultdict
 
-INPUT_FOLDER = "input_datasets/"
-INPUT_FILE_NAME = argv[1]
-OUTPUT_FILE_NAME = argv[2]
+# INPUT_FOLDER = "input_datasets/"
+# INPUT_FILE_NAME = argv[1]
+# OUTPUT_FILE_NAME = argv[2]
 
 def parseInput(filepath):
 	reader = Reader(filepath)
@@ -20,7 +20,7 @@ def parseInput(filepath):
 	streets = defaultdict(list)
 	for streetdetails in reader.get_n_sections(start=2, sectionsize=1, n=overview_dict["num_streets"]):
 		streetdetails = streetdetails[0].split()
-		print(streetdetails)
+		# print(streetdetails)
 
 		streets[streetdetails[2]].append(tuple(int(x) for x in [streetdetails[0], streetdetails[1]]))		
 		streets[streetdetails[2]].append(int(streetdetails[3]))
@@ -29,13 +29,13 @@ def parseInput(filepath):
 
 	carlines = reader.get_n_sections(start=overview_dict["num_streets"] + 2, sectionsize=1, n=overview_dict["num_cars"] + overview_dict["num_streets"])
 	for i, carsdetails in enumerate(carlines):
-		print("here")
+		# print("here")
 		carsdetails = carsdetails[0].split()
-		print(carsdetails)
+		# print(carsdetails)
 		cars[i] = carsdetails[1:]
 
 	
 	# a car is a list with each index as its name and it contains the routes it will pass
 	return overview_dict, streets, cars
 
-parseInput(INPUT_FILE_NAME)
+# parseInput(INPUT_FILE_NAME)

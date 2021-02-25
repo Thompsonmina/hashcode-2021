@@ -1,8 +1,53 @@
 from sys import argv
+from utils import Reader
 from random import randint, gauss
-from solution import parseInput
-from get_intersections import get_intersections
+from collections import defaultdict
 
+
+def parseInput(filepath):
+	reader = Reader(filepath)
+	overview_line = [int(x) for x in reader.get_first_line().split()]
+	overview_dict = {
+						"sim_time": overview_line[0],
+						"num_intersections": overview_line[1],
+						"num_streets": overview_line[2],
+						"num_cars": overview_line[3],
+						"finishscore": overview_line[4]
+	}
+
+	streets = defaultdict(list)
+	for streetdetails in reader.get_n_sections(start=2, sectionsize=1, n=overview_dict["num_streets"]):
+		streetdetails = streetdetails[0].split()
+		# print(streetdetails)
+
+		streets[streetdetails[2]].append(tuple(int(x) for x in [streetdetails[0], streetdetails[1]]))		
+		streets[streetdetails[2]].append(int(streetdetails[3]))
+
+	cars = [0 for x in range(overview_dict["num_cars"])]
+
+	carlines = reader.get_n_sections(start=overview_dict["num_streets"] + 2, sectionsize=1, n=overview_dict["num_cars"] + overview_dict["num_streets"])
+	for i, carsdetails in enumerate(carlines):
+		# print("here")
+		carsdetails = carsdetails[0].split()
+		# print(carsdetails)
+		cars[i] = carsdetails[1:]
+
+	
+	# a car is a list with each index as its name and it contains the routes it will pass
+	return overview_dict, streets, cars
+
+
+def get_intersections(street_dictionary, no_of_intersections):
+    intersections = []
+    for i in range (0, (no_of_intersections)):
+        intersect = []
+        for key in street_dictionary:
+            if(street_dictionary[key][0][1] == i):
+                intersect.append(key)
+            else:
+                continue
+        intersections.append(intersect)
+    return intersections
 
 def random_submission(intersections, simulation_time):
     no_of_intersections = len(intersections)
@@ -19,8 +64,10 @@ def random_submission(intersections, simulation_time):
 
         # allocate time to streets
         for street_name in incoming_streets:
-            upper_limit = int(simulation_time / len(incoming_streets))
-            time_to_allocate = int(abs(gauss(0, upper_limit)))
+            upper_limit = simulation_time // len(incoming_streets)
+            time_to_allocate = randint(1, upper_limit)
+            
+            # time_to_allocate = int(abs(gauss(0, upper_limit)))
             schedules.append(f"{street_name} {time_to_allocate}")
     
     return schedules

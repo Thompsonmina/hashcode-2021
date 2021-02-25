@@ -1,6 +1,10 @@
-from random import randint
+from sys import argv
+from random import randint, gauss
+from solution import parseInput
+from get_intersections import get_intersections
 
-def random_submission(intersections):
+
+def random_submission(intersections, max_simulation_time):
     no_of_intersections = len(intersections)
     schedules = []
     schedules.append(no_of_intersections)
@@ -15,7 +19,8 @@ def random_submission(intersections):
 
         # allocate time to streets
         for street_name in incoming_streets:
-            time_to_allocate = randint(0, 10)
+            upper_limit = max(10, max_simulation_time)
+            time_to_allocate = int(abs(gauss(0, 1) * upper_limit))
             schedules.append(f"{street_name} {time_to_allocate}")
     
     return schedules
@@ -28,9 +33,13 @@ def create_submission(schedules, file_name):
         file_stream.write("\n".join(schedules_string))
 
 def main():
-    intersections = [['rome', 'chater'], ['paris', 'ikeja']]
-    schedules = random_submission(intersections)
-    create_submission(schedules, 'testing')
+    INPUT_FILE_NAME = argv[1]
+    overview_dict, streets, cars = parseInput(INPUT_FILE_NAME)
+
+    intersections = get_intersections(streets, overview_dict.get("num_intersections"))
+
+    schedules = random_submission(intersections, overview_dict.get("sim_time"))
+    create_submission(schedules, INPUT_FILE_NAME + '_submission')
 
 if __name__ == '__main__':
     main()

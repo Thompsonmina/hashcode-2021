@@ -4,7 +4,7 @@ from solution import parseInput
 from get_intersections import get_intersections
 
 
-def random_submission(intersections, max_simulation_time):
+def random_submission(intersections, simulation_time):
     no_of_intersections = len(intersections)
     schedules = []
     schedules.append(no_of_intersections)
@@ -19,8 +19,8 @@ def random_submission(intersections, max_simulation_time):
 
         # allocate time to streets
         for street_name in incoming_streets:
-            upper_limit = max(10, int(max_simulation_time / len(incoming_streets)))
-            time_to_allocate = int(abs(gauss(0, 1) * upper_limit))
+            upper_limit = int(simulation_time / len(incoming_streets))
+            time_to_allocate = int(abs(gauss(0, upper_limit)))
             schedules.append(f"{street_name} {time_to_allocate}")
     
     return schedules
